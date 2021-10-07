@@ -28,12 +28,15 @@ public class TestStartup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app)
     {
-        app.UseMiddleware<ProviderStateMiddleware>();
         app.UseRouting();
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapGet("/", () => "hello, world");
+            endpoints.MapPost("/provider-states", (ProviderState providerState) =>
+            {
+                new ConsumerProviderStateSetupCommand().Execute(providerState);
+                return "";
+            });
         });
     }
 }
