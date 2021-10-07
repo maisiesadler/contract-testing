@@ -36,7 +36,6 @@ public class ProviderStateMiddleware
     {
         string path = Path.Combine(Directory.GetCurrentDirectory(), @"../../../../../data");
         var deletePath = Path.Combine(path, "somedata.txt");
-        System.Console.WriteLine("Removeall");
 
         if (File.Exists(deletePath))
         {
@@ -48,7 +47,6 @@ public class ProviderStateMiddleware
     {
         string path = Path.Combine(Directory.GetCurrentDirectory(), @"../../../../../data");
         var writePath = Path.Combine(path, "somedata.txt");
-        System.Console.WriteLine("Addall");
 
         if (!File.Exists(writePath))
         {
