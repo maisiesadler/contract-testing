@@ -16,7 +16,7 @@ public class ConsumerPactClassFixture : IDisposable
 
     public ConsumerPactClassFixture()
     {
-        var dir = "../../../../../"; // from bin to consumer root dir
+        var dir = "../../../../../../"; // from bin to root dir
         // Using Spec version 2.0.0 more details at https://goo.gl/UrBSRc
         var pactConfig = new PactConfig
         {
@@ -24,8 +24,6 @@ public class ConsumerPactClassFixture : IDisposable
             PactDir = $"{dir}pacts",
             LogDir = $"{dir}pact_logs",
         };
-
-        System.Console.WriteLine($"{dir}pacts");
 
         PactBuilder = new PactBuilder(pactConfig);
 
