@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using PactNet;
@@ -9,7 +10,6 @@ using Xunit.Abstractions;
 
 namespace Producer.Tests;
 
-// /Users/maisiesadler/repos/contract-testing/consumer/pacts
 public class ProviderApiTests : IDisposable
 {
     private string _providerUri { get; }
@@ -24,6 +24,7 @@ public class ProviderApiTests : IDisposable
         _pactServiceUri = "http://localhost:9001";
 
         _webHost = WebHost.CreateDefaultBuilder()
+            // .UseKestrel(options => options.AllowSynchronousIO = false)
             .UseUrls(_pactServiceUri)
             .UseStartup<TestStartup>()
             .Build();
@@ -49,13 +50,17 @@ public class ProviderApiTests : IDisposable
             Verbose = true
         };
 
-        //Act / Assert
+        var dir = "../../../../../../"; // from bin to root dir
+
+        System.Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
+        System.Console.WriteLine($"{dir}pacts");
+
+        // Act / Assert
         IPactVerifier pactVerifier = new PactVerifier(config);
         pactVerifier.ProviderState($"{_pactServiceUri}/provider-states")
             .ServiceProvider("Provider", _providerUri)
             .HonoursPactWith("Consumer")
-            // .PactUri(@"../../../../../pacts/consumer-provider.json")
-            .PactUri("/Users/maisiesadler/repos/contract-testing/consumer/pacts/consumer-provider.json")
+            .PactUri($"{dir}pacts/consumer-provider.json")
             .Verify();
     }
 
