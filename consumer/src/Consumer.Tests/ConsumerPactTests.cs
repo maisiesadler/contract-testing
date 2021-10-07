@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Xunit;
 using PactNet.Mocks.MockHttpService;
 using PactNet.Mocks.MockHttpService.Models;
-using Consumer;
-using System.IO;
 
 namespace Consumer.Tests;
 
