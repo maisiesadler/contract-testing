@@ -1,20 +1,18 @@
 using System;
-using Xunit;
 using PactNet;
 using PactNet.Mocks.MockHttpService;
-using System.IO;
 
 namespace Consumer.Tests;
 
-public class ConsumerPactClassFixture : IDisposable
+public class ProviderMock : IDisposable
 {
-    public IPactBuilder PactBuilder { get; private set; }
-    public IMockProviderService MockProviderService { get; private set; }
+    private IPactBuilder _pactBuilder;
+    private int _mockServerPort => 9222;
 
-    public int MockServerPort { get { return 9222; } }
-    public string MockProviderServiceBaseUri { get { return String.Format("http://localhost:{0}", MockServerPort); } }
+    public IMockProviderService MockProviderService { get; }
+    public string MockProviderServiceBaseUri => string.Format("http://localhost:{0}", _mockServerPort);
 
-    public ConsumerPactClassFixture()
+    public ProviderMock()
     {
         var dir = "../../../../../../"; // from bin to root dir
         // Using Spec version 2.0.0 more details at https://goo.gl/UrBSRc
@@ -25,12 +23,12 @@ public class ConsumerPactClassFixture : IDisposable
             LogDir = $"{dir}pact_logs",
         };
 
-        PactBuilder = new PactBuilder(pactConfig);
+        _pactBuilder = new PactBuilder(pactConfig);
 
-        PactBuilder.ServiceConsumer("Consumer")
+        _pactBuilder.ServiceConsumer("Consumer")
                    .HasPactWith("Provider");
 
-        MockProviderService = PactBuilder.MockService(MockServerPort, useRemoteMockService: false);
+        MockProviderService = _pactBuilder.MockService(_mockServerPort);
     }
 
     #region IDisposable Support
@@ -43,7 +41,7 @@ public class ConsumerPactClassFixture : IDisposable
             if (disposing)
             {
                 // This will save the pact file once finished.
-                PactBuilder.Build();
+                _pactBuilder.Build();
             }
 
             disposedValue = true;

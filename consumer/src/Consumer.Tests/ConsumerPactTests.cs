@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 using PactNet.Mocks.MockHttpService;
@@ -8,20 +6,20 @@ using PactNet.Mocks.MockHttpService.Models;
 
 namespace Consumer.Tests;
 
-public class ConsumerPactTests : IClassFixture<ConsumerPactClassFixture>
+public class ConsumerPactTests : IClassFixture<TestFixture>
 {
-    private IMockProviderService _mockProviderService;
-    private string _mockProviderServiceBaseUri;
+    private readonly TestFixture _fixture;
+    private readonly IMockProviderService _mockProviderService;
 
-    public ConsumerPactTests(ConsumerPactClassFixture fixture)
+    public ConsumerPactTests(TestFixture fixture)
     {
         _mockProviderService = fixture.MockProviderService;
-        _mockProviderService.ClearInteractions(); //NOTE: Clears any previously registered interactions before the test is run
-        _mockProviderServiceBaseUri = fixture.MockProviderServiceBaseUri;
+        _mockProviderService.ClearInteractions();
+        _fixture = fixture;
     }
 
     [Fact]
-    public void ItHandlesInvalidDateParam()
+    public async Task ItHandlesInvalidDateParam()
     {
         // Arange
         var invalidRequestMessage = "validDateTime is not a date or time";
@@ -46,31 +44,13 @@ public class ConsumerPactTests : IClassFixture<ConsumerPactClassFixture>
                     message = invalidRequestMessage
                 }
             });
+        var client = _fixture.CreateClient();
 
         // Act
-        var result = ConsumerApiClient.ValidateDateTimeUsingProviderApi("lolz", _mockProviderServiceBaseUri).GetAwaiter().GetResult();
-        var resultBodyText = result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var response = await client.GetAsync("/");
+        var resultBodyText = await response.Content.ReadAsStringAsync();
 
         // Assert
         Assert.Contains(invalidRequestMessage, resultBodyText);
-    }
-
-    public static class ConsumerApiClient
-    {
-        static public async Task<HttpResponseMessage> ValidateDateTimeUsingProviderApi(string dateTimeToValidate, string baseUri)
-        {
-            using (var client = new HttpClient { BaseAddress = new Uri(baseUri) })
-            {
-                try
-                {
-                    var response = await client.GetAsync($"/api/provider?validDateTime={dateTimeToValidate}");
-                    return response;
-                }
-                catch (System.Exception ex)
-                {
-                    throw new Exception("There was a problem connecting to Provider API.", ex);
-                }
-            }
-        }
     }
 }
