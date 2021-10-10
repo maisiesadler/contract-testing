@@ -1,0 +1,25 @@
+name: Build and Test
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dockerbuild:
+    name: Docker build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Generate producer contract pacts
+        shell: bash
+        run: |
+          cd ./producer/src/Producer.ContractTests
+          dotnet test
+
+      - name: Run unit tests
+        shell: bash
+        run: |
+          cd ./producer
+          dotnet test
