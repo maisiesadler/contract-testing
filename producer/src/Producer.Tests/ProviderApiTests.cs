@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using PactNet;
@@ -51,9 +50,6 @@ public class ProviderApiTests : IDisposable
         };
 
         var dir = "../../../../../../"; // from bin to root dir
-
-        System.Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
-        System.Console.WriteLine($"{dir}pacts");
 
         // Act / Assert
         IPactVerifier pactVerifier = new PactVerifier(config);

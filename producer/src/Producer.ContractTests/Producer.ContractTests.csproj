@@ -22,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Producer.Api\Producer.Api.csproj" />
+    <ProjectReference Include="..\Producer.Contracts\Producer.Contracts.csproj" />
+    <ProjectReference Include="..\Producer.Sdk\Producer.Sdk.csproj" />
   </ItemGroup>
 
 </Project>
