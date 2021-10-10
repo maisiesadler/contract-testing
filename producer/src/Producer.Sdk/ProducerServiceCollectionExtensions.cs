@@ -1,3 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
+
 namespace Producer.Sdk;
 
 public static class ProducerServiceCollectionExtensions

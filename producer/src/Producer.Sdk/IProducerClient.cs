@@ -1,8 +1,4 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
-
-namespace Producer.Sdk;
+﻿namespace Producer.Sdk;
 
 public interface IProducerClient
 {

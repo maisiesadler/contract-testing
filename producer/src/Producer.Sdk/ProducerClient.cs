@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace Producer.Sdk;
 
 internal sealed class ProducerClient : IProducerClient
