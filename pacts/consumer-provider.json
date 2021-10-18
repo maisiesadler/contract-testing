@@ -11,7 +11,7 @@
       "providerState": "There is data",
       "request": {
         "method": "get",
-        "path": "/api/provider",
+        "path": "api/provider",
         "query": "date=lolz"
       },
       "response": {
